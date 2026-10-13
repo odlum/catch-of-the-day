@@ -1,0 +1,61 @@
+name: Render fish
+
+on:
+  schedule:
+    # 08:00 UTC = 04:00 EDT / 03:00 EST, well ahead of the frame's 06:00 wake.
+    # GitHub may start scheduled runs late, especially on the hour.
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      name:
+        description: Fish name to draw (blank = a new random fish)
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: render
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # Scheduled runs draw the date's fish (re-runs give identical files).
+      # Manual runs draw the named fish, or a new random one.
+      - name: Render
+        id: render
+        env:
+          EVENT: ${{ github.event_name }}
+          FISH_NAME: ${{ inputs.name }}
+          LINE_WIDTH: '2'
+        run: |
+          set --
+          if [ "$EVENT" = workflow_dispatch ]; then
+            if [ -n "$FISH_NAME" ]; then set -- --name "$FISH_NAME"; else set -- --random; fi
+          fi
+          node render/render.mjs --width "$LINE_WIDTH" "$@"
+
+      - name: Commit and push
+        env:
+          FISH_NAME: ${{ steps.render.outputs.name }}
+          FISH_DATE: ${{ steps.render.outputs.date }}
+        run: |
+          git add docs
+          if git diff --cached --quiet; then
+            echo "Nothing changed; skipping commit."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "Fish of $FISH_DATE: $FISH_NAME"
+          git push

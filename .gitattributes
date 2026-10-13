@@ -1,0 +1,3 @@
+# Binary bitmaps: never convert line endings or diff as text.
+*.bin binary
+*.pbm binary

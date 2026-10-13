@@ -1,0 +1,3 @@
+firmware/**/config.h
+render/preview.pbm
+previews/

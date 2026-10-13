@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catch of the Day</title>
+<style>
+  :root { color-scheme: light dark; --bg: #f4f1ea; --fg: #222; --muted: #777; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #1b1b1b; --fg: #eee; --muted: #999; } }
+  body { margin: 0 auto; max-width: 1100px; padding: 24px 16px; background: var(--bg); color: var(--fg);
+         font: 16px/1.4 Georgia, serif; }
+  h1 { font-weight: normal; margin: 0 0 4px; }
+  p { margin: 0 0 24px; color: var(--muted); }
+  .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  figure { margin: 0; }
+  img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid #ccc; }
+  figcaption { display: flex; justify-content: space-between; gap: 8px; margin-top: 6px; }
+  time { color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>Catch of the Day</h1>
+<p>A new fish every morning, drawn by <a href="https://github.com/LingDong-/fishdraw">fishdraw</a>.</p>
+<div class="grid">
+<figure><a href="archive/2026-10-04.svg"><img src="archive/2026-10-04.svg" alt="Apogrothys otus." width="800" height="480" loading="lazy"></a><figcaption><i>Apogrothys otus.</i> <time>2026-10-04</time></figcaption></figure>
+</div>
+</body>
+</html>
